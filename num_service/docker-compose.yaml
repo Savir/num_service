@@ -18,6 +18,20 @@ services:
     volumes:
       - backstage_postgres_data:/var/lib/postgresql/data
 
+  migrator:
+    build:
+      context: ./backend
+      dockerfile: backend.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://admin:adminpass@postgres:5432/num_service
+    volumes:
+      - ./backend:/backend
+    command: >
+      sh -c "python manage.py makemigrations && python manage.py migrate"
+
   backend:
     build:
       context: ./backend
@@ -25,8 +39,8 @@ services:
     container_name: backstage_backend
     restart: no
     depends_on:
-      postgres:
-        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
     environment:
       - DATABASE_URL=postgres://admin:adminpass@postgres:5432/num_service
     ports:
