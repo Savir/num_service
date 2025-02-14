@@ -14,7 +14,8 @@ class PythagoreanTripletAPITest(APITestCase):
             {"a": 231, "b": 160, "c": 281},
         ]
         # We know those are valid pythagorean triples.
-        # Our "number" (the parameter sent to the API) is the product of them
+        # Our "number" (the parameter sent to the API) is the product of them. We can use that fact to generate
+        # said "number".
         for test_case in test_cases:
             number = test_case["a"] * test_case["b"] * test_case["c"]
             response = self.client.get(f"/pythagorean?number={number}")

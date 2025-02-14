@@ -28,6 +28,9 @@ class SquaresDiff(BaseNumericModel):
         # There are well known (erm... well known to chatGPT) algorithms for that. This way can can avoid
         # having to introduce complex speedup tools such as memoization, caching... we can just do a few
         # blazing fast multiplications/divisions.
+        # Here's some more detail:
+        #   sum of squares: https://www.geeksforgeeks.org/sum-of-squares/#sum-of-squares-for-n-natural-numbers
+        #   sum of N natural numbers (not squared): https://en.wikipedia.org/wiki/1_%2B_2_%2B_3_%2B_4_%2B_%E2%8B%AF
         sum_of_squares = (self.number * (self.number + 1) * (2 * self.number + 1)) // 6
         square_of_sum = ((self.number * (self.number + 1)) // 2) ** 2
         return square_of_sum - sum_of_squares

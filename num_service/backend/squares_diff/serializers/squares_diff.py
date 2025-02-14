@@ -5,7 +5,7 @@ from squares_diff.models import SquaresDiff
 
 
 class SquaresDiffSerializer(BaseNumericSerializer, serializers.ModelSerializer):
-    value = serializers.IntegerField()   # This comes from a @property
+    value = serializers.IntegerField()   # This comes from a @property in the SquaresDiff model
 
     class Meta(BaseNumericSerializer.Meta):
         model = SquaresDiff

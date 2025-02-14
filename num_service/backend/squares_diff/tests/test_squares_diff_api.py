@@ -22,8 +22,8 @@ class SquaresDiffAPITest(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_number(self):
-        """ Make sure if we don't provide a number we will get a malformed request error"""
-        response= self.client.get(f"/difference")
+        """Make sure if we don't provide a number we will get a malformed request error"""
+        response = self.client.get(f"/difference")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_occurrences_increment(self):
@@ -34,4 +34,3 @@ class SquaresDiffAPITest(APITestCase):
             self.client.get(f"/difference?number={number}")
         obj = SquaresDiff.objects.get(number=number)
         self.assertEqual(obj.occurrences, num_requests)
-

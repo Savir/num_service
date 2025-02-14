@@ -36,6 +36,6 @@ class SquaresDiffAPIView(APIView):
         # Serialize data (before calling .save, which will update "last_datetime")
         response_data = SquaresDiffSerializer(squares_diff).data
 
-        squares_diff.save()  # .save will update the 'auto_now" last_datetime field
+        squares_diff.save()  # .save will update the "auto_now" last_datetime field
 
         return Response(response_data, status=status.HTTP_200_OK)
