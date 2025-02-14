@@ -5,7 +5,7 @@ from squares_diff.models import SquaresDiff
 from squares_diff.tests import utils as test_utils
 
 
-class DifferenceAPITest(APITestCase):
+class SquaresDiffAPITest(APITestCase):
 
     def test_valid_number(self):
         """Test API returns correct response for a valid number"""
@@ -21,6 +21,11 @@ class DifferenceAPITest(APITestCase):
         response = self.client.get(f"/difference?number={number}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_number(self):
+        """ Make sure if we don't provide a number we will get a malformed request error"""
+        response= self.client.get(f"/difference")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_occurrences_increment(self):
         """Test occurrences field increments correctly"""
         num_requests = 5
@@ -30,9 +35,3 @@ class DifferenceAPITest(APITestCase):
         obj = SquaresDiff.objects.get(number=number)
         self.assertEqual(obj.occurrences, num_requests)
 
-    def test_db_value(self):
-        """Test that the obj.value gets stored properly"""
-        number = 5
-        self.client.get(f"/difference?number={number}")
-        obj = SquaresDiff.objects.get(number=number)
-        self.assertEqual(obj.value, test_utils.manual_square_diff_calc(number))

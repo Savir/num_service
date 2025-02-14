@@ -12,13 +12,19 @@ if typing.TYPE_CHECKING:
 class PythagoreanTriplet(BaseNumericModel):
     objects: "Manager[PythagoreanTriplet]"  # Type hint only (.objects is added in the Metadata._prepare method)
 
+    @classmethod
+    def generate_cache_key(cls, number) -> str:
+        # It may seem a bit dumb extrapolating this into a method, but it will be
+        # used in the test suite so... there!
+        return f"{cls.__name__}_{number}"
+
     @property
     def triplet(self) -> dict[str, int] | None:
         """Finds a Pythagorean triplet (a, b, c) such that a * b * c = number,
         using an optimized approach thanks to ChatGPT.
         See: https://en.wikipedia.org/wiki/Pythagorean_triple#Geometry_of_Euclid's_formula
         """
-        cache_key = f"{self.__class__.__name__}_{self.number}"
+        cache_key = self.generate_cache_key(self.number)
         if cache.has_key(cache_key):
             # Need to check whether we have the key because it could be None (which
             # means: Just checking "if cache.get(cache_key):" and assuming that if we
@@ -28,7 +34,6 @@ class PythagoreanTriplet(BaseNumericModel):
 
         # If we're here, we need to calculate the triplet because is not cached
         limit = isqrt(self.number)
-
         for m in range(2, limit):
             for n_ in range(1, m):
                 if gcd(m, n_) != 1 or (m - n_) % 2 == 0:
@@ -49,5 +54,5 @@ class PythagoreanTriplet(BaseNumericModel):
                     cache.set(cache_key, triplet, timeout=3600)
                     return triplet
 
-        cache.set(cache_key, None, timeout=3600)
+        cache.set(cache_key, None, timeout=3600)  # Cache for one hour
         return None
