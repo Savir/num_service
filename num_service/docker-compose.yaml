@@ -18,4 +18,4 @@ services:
     volumes:
       - ./backend:/backend
     command: >
-      sh -c "watchmedo auto-restart --directory=/backend/core --pattern=*.py --recursive -- python manage.py runserver 0.0.0.0:8000"
+      sh -c "watchmedo auto-restart --directory=/backend --pattern=*.py --recursive -- python manage.py runserver 0.0.0.0:8000"
