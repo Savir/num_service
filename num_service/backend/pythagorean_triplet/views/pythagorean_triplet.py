@@ -21,7 +21,11 @@ class PythagoreanTripletAPIView(APIView):
                 {"error": "Invalid number", "number": number},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
+        if number < 0:
+            return Response(
+                {"error": f"Number must be positive or zero.", "number": number},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         pythagorean_triplet: PythagoreanTriplet  # Just a type hint
         pythagorean_triplet, _ = PythagoreanTriplet.objects.get_or_create(number=number)
         pythagorean_triplet.occurrences += 1

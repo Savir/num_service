@@ -26,6 +26,12 @@ class PythagoreanTripletAPITest(APITestCase):
         response = self.client.get(f"/pythagorean")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_invalid_numbers(self):
+        """Test API rejects invalid numbers"""
+        number = -10
+        response = self.client.get(f"/difference?number={number}")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_caching_yes_triplet(self):
         """Ensure the cache works when a triplet can be calculated"""
         number = 4200

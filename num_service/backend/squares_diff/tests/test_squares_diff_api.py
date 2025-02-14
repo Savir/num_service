@@ -15,11 +15,11 @@ class SquaresDiffAPITest(APITestCase):
         self.assertEqual(response.data["number"], number)
         self.assertEqual(response.data["value"], test_utils.manual_square_diff_calc(number))
 
-    def test_invalid_number(self):
+    def test_invalid_numbers(self):
         """Test API rejects invalid numbers"""
-        number = 500
-        response = self.client.get(f"/difference?number={number}")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        for number in [-10, 500]:
+            response = self.client.get(f"/difference?number={number}")
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_number(self):
         """ Make sure if we don't provide a number we will get a malformed request error"""
