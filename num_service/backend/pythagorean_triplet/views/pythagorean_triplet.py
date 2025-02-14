@@ -28,7 +28,6 @@ class PythagoreanTripletAPIView(APIView):
 
         # Serialize data (before calling .save, which will update "last_datetime")
         response_data = PythagoreanTripletSerializer(pythagorean_triplet).data
-
         pythagorean_triplet.save()  # This will update the models' last_datetime attribute
         # TODO: If we don't find a triplet for the provided input... should we return a 404?
         #       Probably not, because the endpoint exists and it worked fine, and the calculations worked

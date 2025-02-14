@@ -1,37 +1,7 @@
+include:
+  - docker-compose.db.yaml
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: backstage_db
-    restart: no
-    environment:
-      POSTGRES_DB: num_service
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adminpass
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-    ports:
-      - "5432:5432"
-    volumes:
-      - backstage_postgres_data:/var/lib/postgresql/data
-
-  migrator:
-    build:
-      context: ./backend
-      dockerfile: backend.Dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      - DATABASE_URL=postgres://admin:adminpass@postgres:5432/num_service
-    volumes:
-      - ./backend:/backend
-    command: >
-      sh -c "python manage.py makemigrations && python manage.py migrate"
-
   backend:
     build:
       context: ./backend
@@ -49,6 +19,3 @@ services:
       - ./backend:/backend
     command: >
       sh -c "watchmedo auto-restart --directory=/backend/core --pattern=*.py --recursive -- python manage.py runserver 0.0.0.0:8000"
-
-volumes:
-  backstage_postgres_data:
