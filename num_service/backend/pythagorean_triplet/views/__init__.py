@@ -1,1 +1,1 @@
-from .pythagorean_triplet import TripletAPIView
+from .pythagorean_triplet import PythagoreanTripletAPIView

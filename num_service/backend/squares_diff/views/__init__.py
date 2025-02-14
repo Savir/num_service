@@ -1,1 +1,1 @@
-from .squares_diff import SquaresDiffView
+from .squares_diff import SquaresDiffAPIView

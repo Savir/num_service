@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import SquaresDiffView
+from .views import SquaresDiffAPIView
 
 urlpatterns = [
-    path('', SquaresDiffView.as_view(), name='difference-api'),
+    path('', SquaresDiffAPIView.as_view(), name='squares-diff-api'),
 ]

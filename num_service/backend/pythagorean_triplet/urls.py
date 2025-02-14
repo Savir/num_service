@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import TripletAPIView
+from .views import PythagoreanTripletAPIView
 
 urlpatterns = [
-    path('', TripletAPIView.as_view(), name='pythagorean-triplet-api'),
+    path('', PythagoreanTripletAPIView.as_view(), name='pythagorean-triplet-api'),
 ]
