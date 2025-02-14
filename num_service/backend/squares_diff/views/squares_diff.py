@@ -11,6 +11,11 @@ class SquaresDiffView(APIView):
 
     def get(self, request) -> Response:
         number = request.GET.get("number", None)
+        if number is None:
+            return Response(
+                {"error": "You must provide a 'number' as a query param"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
             number = int(number)
         except ValueError:
