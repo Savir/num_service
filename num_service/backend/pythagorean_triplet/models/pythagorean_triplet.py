@@ -14,8 +14,8 @@ class PythagoreanTriplet(BaseNumericModel):
 
     @classmethod
     def generate_cache_key(cls, number) -> str:
-        # It may seem a bit silly extrapolating something this simple into a method, but that way we can
-        # use it safely in the test suite
+        # It may seem a bit silly encapsulating something this simple into a
+        # method, but that way we can use it safely in the test suite
         return f"{cls.__name__}_{number}"
 
     @property
@@ -24,7 +24,7 @@ class PythagoreanTriplet(BaseNumericModel):
         using an optimized approach... thanks to ChatGPT. It knows a lot!
         You can double-check what ChatGPT suggested in the following link:
            https://en.wikipedia.org/wiki/Pythagorean_triple#Geometry_of_Euclid's_formula
-        That thing knows quite a bit!
+        That thing is quite savvy!
         """
         cache_key = self.generate_cache_key(self.number)
         if cache.has_key(cache_key):
@@ -42,20 +42,24 @@ class PythagoreanTriplet(BaseNumericModel):
                 if gcd(m, n) != 1 or (m - n) % 2 == 0:
                     continue
 
+                # Generate the primitive triplet
                 a = m**2 - n**2
                 b = 2 * m * n
                 c = m**2 + n**2
 
-                if c > 1_000:
-                    # Customer said they didn't want c(s) > 1000 so...
-                    continue
+                # Scale the triplet
+                k = 1
+                while k * c <= 1000:  # Customer said they didn't want c(s) > 1000 so...
+                    ka, kb, kc = k * a, k * b, k * c
+                    product = ka * kb * kc
 
-                product = a * b * c
-                if product == self.number:
-                    triplet = {"a": a, "b": b, "c": c}
-                    # Cache and return to stop looking
-                    cache.set(cache_key, triplet, timeout=3600)
-                    return triplet
+                    if product == self.number:
+                        triplet = {"a": ka, "b": kb, "c": kc}
+                        # Cache and return to stop looking
+                        cache.set(cache_key, triplet, timeout=3600)
+                        return triplet
+
+                    k += 1  # Try scaling
 
         cache.set(cache_key, None, timeout=3600)  # Cache for one hour. The fact the cache_key exists (even
         # though its value is None) means we tried to find the triplet and it doesn't exist.
