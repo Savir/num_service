@@ -9,6 +9,7 @@ __pycache__/
 # PyCharm stuff
 .idea
 .python-version
+Makefile
 
 # Distribution / packaging
 .Python

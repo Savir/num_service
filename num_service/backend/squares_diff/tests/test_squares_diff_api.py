@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from squares_diff.models.diff_request import DiffRequest
+from squares_diff.models import SquaresDiff
 from squares_diff.tests import utils as test_utils
 
 
@@ -27,12 +27,12 @@ class DifferenceAPITest(APITestCase):
         number = 28
         for i in range(num_requests):
             self.client.get(f"/difference?number={number}")
-        obj = DiffRequest.objects.get(number=number)
+        obj = SquaresDiff.objects.get(number=number)
         self.assertEqual(obj.occurrences, num_requests)
 
     def test_db_value(self):
         """Test that the obj.value gets stored properly"""
         number = 5
         self.client.get(f"/difference?number={number}")
-        obj = DiffRequest.objects.get(number=number)
+        obj = SquaresDiff.objects.get(number=number)
         self.assertEqual(obj.value, test_utils.manual_square_diff_calc(number))

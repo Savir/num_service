@@ -1,1 +1,1 @@
-from .diff_request import DiffRequestSerializer
+from .squares_diff import SquaresDiffSerializer
