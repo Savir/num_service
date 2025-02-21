@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -28,7 +29,10 @@ class PythagoreanTripletAPIView(APIView):
             )
         pythagorean_triplet: PythagoreanTriplet  # Just a type hint
         pythagorean_triplet, _ = PythagoreanTriplet.objects.get_or_create(number=number)
-        pythagorean_triplet.occurrences += 1
+        PythagoreanTriplet.objects.filter(number=number).update(occurrences=F("occurrences") + 1)
+        # In the query above, we could filter using .id rather than .number, but .number is clearer and it's indexed,
+        # so should be equally performant
+        pythagorean_triplet.refresh_from_db(fields=['occurrences'])
 
         # Serialize data (before calling .save, which will update "last_datetime")
         response_data = PythagoreanTripletSerializer(pythagorean_triplet).data

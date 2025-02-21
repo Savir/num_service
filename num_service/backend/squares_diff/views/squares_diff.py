@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,7 +11,7 @@ class SquaresDiffAPIView(APIView):
     MAX_NUMBER = 100
 
     def get(self, request) -> Response:
-        """ Handles a GET request in the shape of http://localhost:8000/difference?number=10 """
+        """Handles a GET request in the shape of http://localhost:8000/difference?number=10"""
 
         number = request.GET.get("number", None)
         if number is None:
@@ -31,7 +32,10 @@ class SquaresDiffAPIView(APIView):
 
         squares_diff: SquaresDiff  # Just a type hint
         squares_diff, _ = SquaresDiff.objects.get_or_create(number=number)
-        squares_diff.occurrences += 1
+        SquaresDiff.objects.filter(number=number).update(occurrences=F("occurrences") + 1)
+        # In the query above, we could filter using .id rather than .number, but .number is clearer and it's indexed,
+        # so should be equally performant
+        squares_diff.refresh_from_db(fields=["occurrences"])
 
         # Serialize data (before calling .save, which will update "last_datetime")
         response_data = SquaresDiffSerializer(squares_diff).data
